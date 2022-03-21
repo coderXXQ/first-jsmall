@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Record</title>
+		<style>
+			*{
+			    margin:0;
+			    padding:0;
+			    font-size:16px;
+			    line-height:40px;
+			}
+			.main{
+			    width:520px;
+			    margin: 0 auto;
+			}
+			
+			.main dl{clear: both; height: 45px;}
+			.main dl dt{
+			    text-align:right;
+			    float: left;
+			    width:125px;
+			    height:25px;
+			    padding-right:5px;
+			}
+			.inputs{
+			    width:125px;
+			    height:28px;
+			    border:solid 1px #666666;
+			    float:left;
+			    margin-right:5px;
+			}
+			.main dl dd div{
+			    display: inline;
+			    margin-left:10px;
+			    color:#F00;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main"><img src = "images/top.jpg" alt="top"/>
+		<form action="" method="post" id="myform">
+			<dl>
+				<dt class="left">用户名：</dt>
+				<dd><input id="user" value="" type="text" class="inputs"/>
+				<div id="user_prompt" class="prompt"></div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="left">密码：</dt>
+				<dd><input id="pwd" type="password" value="" class="inputs"/>
+				<div id="pwd_prompt" class="prompt"></div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="left">验证码：</dt>
+				<dd><input id="check" value="" type="text" class="inputs"/>
+				<span id="msg"></span>
+				<input type="button" value="刷新" onclick="show()" />
+				<div id="user_prompt" class="prompt"></div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="left">&nbsp;</dt>
+				<dd><input name="" type="image" src="images/sumbit_btn.jpg"/></dd>
+			</dl>
+		</form>
+		</div>
+	</body>
+	<script>
+		window.onload=function(){
+			var myform=document.getElementById("myform");
+			myform.onsubmit=function(){
+				var flag=true;
+				if(!checkUser()) flag=false;
+				if(!checkPwd()) flag=false;
+				return flag;
+			}
+			var user=document.getElementById("user");
+			var pwd=document.getElementById("pwd");
+			var userId=document.getElementById("user_prompt");
+			var pwdId=document.getElementById("pwd_prompt");
+			user.onblur=checkUser;
+			pwd.onblur=checkPwd;
+			user.addEventListener("focus",showUser);
+			pwd.addEventListener("focus",showPwd);
+			function checkUser(){
+				var username=user.value;
+				userId.innerHTML="";
+				var reg=/^[a-zA-Z][\w_]{4,15}$/;
+				if(reg.test(username)==false){
+					userId.innerHTML="用户名不正确";
+					return false;
+				}
+				return true;
+			}
+			function checkPwd(){
+				var password=pwd.value;
+				pwdId.innerHTML="";
+				var reg=/^[a-zA-Z0-9]{4,10}$/;
+				if(reg.test(username)==false){
+					pwdId.innerHTML="密码不正确";
+					return false;
+				}
+				return true;
+				}
+			function showUser(){
+				var userId=document.getElementById("user_prompt");
+				userId.innerHTML="首位为字母的4-16个数字、字母、下划线";
+			}
+			function showPwd(){
+				var pwdId=document.getElementById("pwd_prompt");
+				pwdId.innerHTML="4-10个字母和下划线";
+			}
+		}
+		
+		var ret;
+		function validateCode(n){
+			ret="";
+			var s="abcdefghijklmnopqrstuvwxyz0123456789";
+			for(var i=0;i<n;i++){
+				var len=s.length;
+				var index=Math.floor(Math.random()*len);
+				ret+=s.charAt(index);
+			}
+			return ret;
+		}
+		function show(){
+			document.getElementById('msg').innerHTML=validateCode(5);
+			console.log(ret);
+		}
+		window.onload=show;
+		function check(){
+			var code=document.getElementById("code").value;
+		}
+		if(code.length<0){
+			alert('请输入验证码!');
+		}
+		else if(code!=ret){
+		alert("验证码输入错误!");
+		document.getElementById("code").value="";
+		validateCode(4);
+		}else{
+			alert("OK");
+		}
+	</script>
+</html>
